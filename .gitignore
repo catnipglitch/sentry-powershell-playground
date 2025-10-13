@@ -1,0 +1,11 @@
+# Ignore dotenv and common secrets
+.env
+.env.*
+*.env
+*.env.*
+
+# Node / Python / misc
+node_modules/
+venv/
+.DS_Store
+Thumbs.db
