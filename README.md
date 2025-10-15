@@ -8,7 +8,8 @@ PowerShellで`.env`を読み込んでSentryなどのクレデンシャルをセ�
 | --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | `scripts/sample01_simple_throw.ps1`                             | 1ファイル完結。`.env`から`SENTRY_DSN`を取得し、Sentry初期化→テスト例外を送信。                           |
 | `scripts/sample02_init_from_dotenv_and_throw.ps1`               | 外部init（`init_sentry_and_load_env.ps1`）で`.env`読み込みとSentry初期化し、本体は最小コードで例外送信。 |
-| `scripts/sample03_collect_machine_info_and_capture_message.ps1` | マシン情報を収集してメッセージとして送信する。（`CaptureMessage`）。                                     |
+| `scripts/sample03_collect_machine_info_and_capture_message.ps1` | マシン情報を収集してメッセージとして送信する（`CaptureMessage`）。                                       |
+| `scripts/sample04_stats_errors_week.ps1`                        | 今週（過去7日間）のエラー件数をSentry APIで取得し、日別集計と合計を表示。                                |
 
 ---
 ## 使い方
@@ -113,6 +114,26 @@ pwsh -File .\scripts\sample03_collect_machine_info_and_capture_message.ps1
 補足:
 - 送信内容はExtras(`diagnostics_json`,`computer_name`)とTags(`sample=sample03`,`kind=diagnostics`)として付与されます。
 - 送信完了後はイベントIDが表示されます。SentryのUIでイベントID検索すると確認しやすいです。
+
+---
+
+### `scripts/sample04_stats_errors_week.ps1` — スクリプトの解説
+
+SentryのREST APIを使って「過去7日間のエラー数」を取得し、日別内訳と合計を表示します。`SENTRY_AUTH_TOKEN` と `SENTRY_ORG` が必要で、`SENTRY_PROJECT` を設定すると特定プロジェクトに絞り込めます。
+
+実行:
+
+```powershell
+pwsh -File .\scripts\sample04_stats_errors_week.ps1
+```
+
+必要な環境変数（参照系のみ必要）:
+
+```powershell
+$env:SENTRY_AUTH_TOKEN = '<Your API Token>'
+$env:SENTRY_ORG        = '<org-slug>'
+$env:SENTRY_PROJECT    = '<project-slug>'  # 任意
+```
 
 ## 初期化スクリプト（関数）
 
